@@ -1,5 +1,5 @@
 #include "Screen.hpp"
-#include <GL/gl.h>
+#include "../include/glad/glad.h"
 #include <iostream>
 
 
@@ -56,6 +56,12 @@ bool Screen::Initialize()
     {
         std::cout <<"Error initializing OpenGL context" <<std::endl;
         return false;
+    }
+
+    gladLoadGL();//return 0 or 1
+    if(!gladLoadGL())
+    {
+        std::cout <<"Error Glad loading extensions" <<std::endl;
     }
 
     return true;

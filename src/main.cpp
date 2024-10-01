@@ -1,8 +1,9 @@
 //g++ main.cpp -o main.o -lSDL2 -lGL 
+//g++ ./src/*.cpp ./src/glad.c -I./src/*.hpp -I./include -o main.exe -lSDL2 
 
-#include <GL/gl.h>
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "../include/glad/glad.h"
 #include "Screen.hpp"
 #include "Input.hpp"
 
