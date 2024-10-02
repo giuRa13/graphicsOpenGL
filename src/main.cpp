@@ -11,11 +11,22 @@
 
 bool isRunning = true;
 
+void GetOpenGLVersionInfo()
+{
+    std::cout <<"Vendor: " <<glGetString(GL_VENDOR) <<std::endl;
+    std::cout <<"Renderer: " <<glGetString(GL_RENDERER) <<std::endl;
+    std::cout <<"Version: " <<glGetString(GL_VERSION) <<std::endl;
+    std::cout <<"Shadong Language: " <<glGetString(GL_SHADING_LANGUAGE_VERSION) <<std::endl;
+    std::cout <<"\n";
+}
+
 
 int main(int argc, char* argv[])
 {
 
     Screen::Instance()->Initialize();
+
+    GetOpenGLVersionInfo();
 
     if(!Shader::Instance()->CreateProgram()) return 0;
     if(!Shader::Instance()->CreateShaders()) return 0;
@@ -37,6 +48,50 @@ int main(int argc, char* argv[])
 
     float xPos = 0.0f;
     float yPos = 0.0f;
+
+
+    GLfloat vertices[] = { -0.5f,  0.5f, 0.0f, //t1
+                            0.5f,  0.5f, 0.0f,
+                           -0.5f, -0.5f, 0.0f,
+                           -0.5f, -0.5f, 0.0f, //t2
+                            0.5f,  0.5f, 0.0f,
+                            0.5f, -0.5f, 0.0f };
+
+    GLfloat colors[] = { 1.0f, 0.0f, 0.0f,
+                         0.0f, 0.0f, 1.0f,
+                         0.0f, 1.0f, 1.0f,
+                         0.0f, 1.1f, 1.1f,
+                         0.0f, 0.0f, 1.0f,
+                         0.0f, 1.0f, 0.f };
+    // variables in Shaders
+    GLuint shaderProgramID = Shader::Instance()->GetShaderProgramID();
+    GLint vertexID = glGetAttribLocation(shaderProgramID, "vertexIn");
+    GLint colorID = glGetAttribLocation(shaderProgramID, "colorIn");
+    // create VBO
+    GLuint vertexVBO;
+    GLuint colorVBO;
+    glGenBuffers(1, &vertexVBO);
+    glGenBuffers(1, &colorVBO);
+
+    GLuint VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO); //bind the 2 VBOs toghether
+
+        // pass Data to VBO
+        glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        // link VBO with the vertex Attribute so the shaders know whats coming in 
+        glVertexAttribPointer(vertexID, 3, GL_FLOAT, GL_FALSE, 0, nullptr); //normalized=false //nullptr=start at the begin
+        glEnableVertexAttribArray(vertexID);
+
+        glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);  
+        glVertexAttribPointer(colorID, 3, GL_FLOAT, GL_FALSE, 0, nullptr); 
+        glEnableVertexAttribArray(colorID);
+    
+    glBindVertexArray(0);
+
+
 
     while(isRunning)
     {
@@ -81,24 +136,21 @@ int main(int argc, char* argv[])
         }
 
 
-        //update/render
-        glBegin(GL_QUADS);
-            glColor3f(1,0,0);
-            glVertex3f(xPos- 0.5f, yPos + 0.5f, 0.0f);
-            
-            glColor3f(0,1,0);
-            glVertex3f(xPos + 0.5f, yPos + 0.5f, 0.0f);
-
-            glColor3f(0,0,1);
-            glVertex3f(xPos +0.5f,  yPos -0.5f,  0.0f);
-
-            glColor3f(0,0,1);
-            glVertex3f(xPos - 0.5, yPos - 0.5f, 0.0f);
-        glEnd();
+        // update/render /////////////////////////////////////
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6); //0=start 
+        glBindVertexArray(0);
 
         Screen::Instance()->Present();
     
     }
+
+    glDeleteBuffers(1, &vertexVBO);
+    glDeleteBuffers(1, &colorVBO);
+    glDeleteVertexArrays(1, &VAO);
+    
+    glDisableVertexAttribArray(vertexID);
+    glDisableVertexAttribArray(colorID);
 
     Shader::Instance()->DetachShaders();
     Shader::Instance()->DestroyShaders();

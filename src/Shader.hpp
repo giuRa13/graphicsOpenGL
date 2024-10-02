@@ -13,6 +13,8 @@ public:
     static Shader* Instance();
 
 public:
+    GLuint GetShaderProgramID();
+
     bool CreateProgram();
     bool CreateShaders();
 
@@ -23,6 +25,13 @@ public:
     void DetachShaders();
     void DestroyShaders();
     void DestroyProgram();
+
+    bool SendUniformData(const std::string& uniformName, GLint data);
+    bool SendUniformData(const std::string& uniformName, GLuint data);
+    bool SendUniformData(const std::string& uniformName, GLfloat data);
+    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y);
+    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y, GLfloat z);
+    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 
 
 private:
