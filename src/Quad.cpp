@@ -1,5 +1,8 @@
 #include "Quad.hpp"
 #include "Buffer.hpp"
+#include "Shader.hpp"
+#include "Input.hpp"
+#include <glm/ext/matrix_transform.hpp>
 
 
 Quad::Quad()
@@ -24,6 +27,9 @@ Quad::Quad()
 
     m_buffer.LinkBuffer("vertexIn", Buffer::VERTEX_BUFFER, Buffer::XYZ, Buffer::FLOAT);
     m_buffer.LinkBuffer("colorIn", Buffer::COLOR_BUFFER, Buffer::RGB, Buffer::FLOAT);
+
+    m_position = glm::vec3(0.0f);
+    m_rotation = 0.0f;
 }
 
 
@@ -33,7 +39,49 @@ Quad::~Quad()
 }
 
 
+void Quad::Update()
+{
+    if(Input::Instance()->IsKeyPressed())
+    {
+        if(Input::Instance()->GetKeyDown() == 'a')
+        {
+            m_position.x  -= 0.01f;
+        }
+        else if(Input::Instance()->GetKeyDown() == 'd')
+        {
+            m_position.x += 0.01f;
+        }
+        else if(Input::Instance()->GetKeyDown() == 'w')
+        {
+            m_position.y += 0.01f;
+        }
+        else if(Input::Instance()->GetKeyDown() == 's')
+        {
+            m_position.y -= 0.01f;
+        }
+
+        if(Input::Instance()->GetKeyDown() == 'n')
+        {
+            m_rotation -= 0.02f; 
+        }
+        else if(Input::Instance()->GetKeyDown() == 'm')
+        {
+            m_rotation += 0.02f;
+        }
+    }
+    
+    m_model = glm::mat4(1.0f);
+   
+    m_model = glm::translate(m_model, m_position);
+    m_model = glm::rotate(m_model, m_rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+    //m_model = glm::translate(m_model, glm::vec3(-0.25f, 0.25f, 0.0f));
+    //m_model = glm::rotate(m_model, glm::radians(m_model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+    //m_model = glm::scale(m_model, glm::vec3(0.5f, 0.5f, 1.0f));
+}
+
+
 void Quad::Render()
 {
+    Shader::Instance()->SendUniformData("model", m_model);
     m_buffer.Render(Buffer::TRIANGLES);
 }

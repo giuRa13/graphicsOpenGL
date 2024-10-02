@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "../include/glad/glad.h"
+#include <glm/glm.hpp>
 #include "Screen.hpp"
 #include "Input.hpp"
 #include "Shader.hpp"
@@ -52,11 +53,10 @@ int main(int argc, char* argv[])
     float yPos = 0.0f;
 
     Quad quad;
-
+    
 
     while(isRunning)
     {
-
         Screen::Instance()->ClearScreen();
         
         Input::Instance()->Update();
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
         {
             isRunning = false;
         }
-        
+
         /*if(Input::Instance()->IsLeftButtonClicked())
         {
             std::cout <<"Left mouse button clicked" <<std::endl;
@@ -76,32 +76,15 @@ int main(int argc, char* argv[])
         /*int mouseX = Input::Instance()->GetMousePositionX();
         int mouseY = Input::Instance()->GetMousePositionY();
         std::cout <<"Mouse position: " <<mouseX <<", " <<mouseY <<std::endl;*/
-        if(Input::Instance()->IsKeyPressed())
-        {
-            if(Input::Instance()->GetKeyDown() == 'a')
-            {
-                xPos -= 0.01f;
-            }
-            else if(Input::Instance()->GetKeyDown() == 'd')
-            {
-                xPos += 0.01f;
-            }
-            else if(Input::Instance()->GetKeyDown() == 'w')
-            {
-                yPos += 0.01f;
-            }
-            else if(Input::Instance()->GetKeyDown() == 's')
-            {
-                yPos -= 0.01f;
-            }
-        }
 
 
         // update/render /////////////////////////////////////
+        quad.Update();
         quad.Render();
         
         //////////////////////////////////////////////////////
         
+
         Screen::Instance()->Present();    
     }
 
