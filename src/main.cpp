@@ -59,6 +59,8 @@ int main(int argc, char* argv[])
     
     Quad quad;
     Camera camera;
+    
+    camera.Set3DView();
 
     ////////////////////////////////////////////////////////
 
