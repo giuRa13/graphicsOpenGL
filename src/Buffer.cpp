@@ -7,6 +7,7 @@ Buffer::Buffer()
     m_VAO = 0;
     m_vertexVBO = 0;
     m_colorVBO = 0;
+    m_textureVBO = 0,
     m_totalVertices = 0;
 }
 
@@ -16,6 +17,7 @@ void Buffer::CreateBuffer(GLuint totalVertices)
     // generate Buffers(in memory)
     glGenBuffers(1, &m_vertexVBO);
     glGenBuffers(1, &m_colorVBO);
+    glGenBuffers(1, &m_textureVBO);
     glGenVertexArrays(1, &m_VAO);
     m_totalVertices = totalVertices;
 }
@@ -29,9 +31,13 @@ void Buffer::FillVBO(VBOType vboType, GLfloat *data, GLsizeiptr bufferSize, Fill
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
         }
-        else
+        else if(vboType == COLOR_BUFFER)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
+        }
+        else 
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
         }
 
         glBufferData(GL_ARRAY_BUFFER, bufferSize, data, fillType); //take raw data(array) and put in VBO
@@ -53,9 +59,13 @@ void Buffer::LinkBuffer(const std::string& attribute, VBOType vboType,
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
         }
-        else
+        else if(vboType == COLOR_BUFFER)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
+        }
+        else 
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
         }
 
         // link VBO with the vertex Attribute so the shaders know whats coming in
@@ -78,6 +88,7 @@ void Buffer::DestroyBuffer()
 {
     glDeleteBuffers(1, &m_vertexVBO);
     glDeleteBuffers(1, &m_colorVBO);
+    glDeleteBuffers(1, &m_textureVBO);
     glDeleteVertexArrays(1, &m_VAO);
 }
 

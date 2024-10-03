@@ -21,13 +21,23 @@ Quad::Quad()
                          [12]=0.0f, [13]=0.0f, [14]=1.0f,
                          [15]=0.0f, [16]=1.0f, [17]=0.f };
 
+    GLfloat UVs[] = { 0.0f, 1.0f,
+                      1.0f, 1.0f,
+                      0.0f, 0.0f,
+                      0.0f, 0.0f,
+                      1.0f, 1.0f,
+                      1.0f, 0.0f};
+
     m_buffer.CreateBuffer(6);
     m_buffer.FillVBO(Buffer::VERTEX_BUFFER, vertices, sizeof(vertices), Buffer::SINGLE);
     m_buffer.FillVBO(Buffer::COLOR_BUFFER, colors, sizeof(colors), Buffer::SINGLE);
+    m_buffer.FillVBO(Buffer::TEXTURE_BUFFER, UVs, sizeof(UVs), Buffer::SINGLE);
 
     m_buffer.LinkBuffer("vertexIn", Buffer::VERTEX_BUFFER, Buffer::XYZ, Buffer::FLOAT);
     m_buffer.LinkBuffer("colorIn", Buffer::COLOR_BUFFER, Buffer::RGB, Buffer::FLOAT);
+    m_buffer.LinkBuffer("textureIn", Buffer::TEXTURE_BUFFER, Buffer::UV, Buffer::FLOAT);
 
+    m_texture.Load( "textures/wood1.png");
     m_position = glm::vec3(0.0f);
     m_rotation = 0.0f;
 }
@@ -92,5 +102,11 @@ void Quad::Update()
 void Quad::Render()
 {
     Shader::Instance()->SendUniformData("model", m_model);
+   
+    m_texture.Bind();
     m_buffer.Render(Buffer::TRIANGLES);
+    m_texture.Unbind();
 }
+
+
+
