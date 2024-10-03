@@ -43,22 +43,31 @@ void Quad::Update()
 {
     if(Input::Instance()->IsKeyPressed())
     {
-        if(Input::Instance()->GetKeyDown() == 'a')
+        if(Input::Instance()->GetKeyDown() == 'j')
         {
             m_position.x  -= 0.01f;
         }
-        else if(Input::Instance()->GetKeyDown() == 'd')
+        else if(Input::Instance()->GetKeyDown() == 'l')
         {
             m_position.x += 0.01f;
         }
-        else if(Input::Instance()->GetKeyDown() == 'w')
+        else if(Input::Instance()->GetKeyDown() == 'i')
         {
             m_position.y += 0.01f;
         }
-        else if(Input::Instance()->GetKeyDown() == 's')
+        else if(Input::Instance()->GetKeyDown() == 'k')
         {
             m_position.y -= 0.01f;
         }
+        else if(Input::Instance()->GetKeyDown() == 'u')
+        {
+            m_position.z += 0.01f;
+        }
+        else if(Input::Instance()->GetKeyDown() == 'o')
+        {
+            m_position.z -= 0.01f;
+        }
+
 
         if(Input::Instance()->GetKeyDown() == 'n')
         {

@@ -9,6 +9,8 @@
 #include "Input.hpp"
 #include "Shader.hpp"
 #include "Quad.hpp"
+#include "Camera.hpp"
+
 
 
 bool isRunning = true;
@@ -52,8 +54,14 @@ int main(int argc, char* argv[])
     float xPos = 0.0f;
     float yPos = 0.0f;
 
-    Quad quad;
+
+    /////////////////////////////////////////////////////////
     
+    Quad quad;
+    Camera camera;
+
+    ////////////////////////////////////////////////////////
+
 
     while(isRunning)
     {
@@ -79,6 +87,8 @@ int main(int argc, char* argv[])
 
 
         // update/render /////////////////////////////////////
+        camera.Update();
+
         quad.Update();
         quad.Render();
         
