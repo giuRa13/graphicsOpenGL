@@ -36,13 +36,13 @@ Quad::Quad()
                       1.0f, 0.0f};
 
     m_buffer.CreateBuffer(6);
-    m_buffer.FillVBO(Buffer::VERTEX_BUFFER, vertices, sizeof(vertices), Buffer::SINGLE);
-    m_buffer.FillVBO(Buffer::COLOR_BUFFER, colors, sizeof(colors), Buffer::SINGLE);
-    m_buffer.FillVBO(Buffer::TEXTURE_BUFFER, UVs, sizeof(UVs), Buffer::SINGLE);
+    m_buffer.FillVBO(Buffer::VBOType::VertexBuffer, vertices, sizeof(vertices), Buffer::FillType::Once);
+    m_buffer.FillVBO(Buffer::VBOType::ColorBuffer, colors, sizeof(colors), Buffer::FillType::Once);
+    m_buffer.FillVBO(Buffer::VBOType::TextureBuffer, UVs, sizeof(UVs), Buffer::FillType::Once);
 
-    m_buffer.LinkBuffer("vertexIn", Buffer::VERTEX_BUFFER, Buffer::XYZ, Buffer::FLOAT);
-    m_buffer.LinkBuffer("colorIn", Buffer::COLOR_BUFFER, Buffer::RGB, Buffer::FLOAT);
-    m_buffer.LinkBuffer("textureIn", Buffer::TEXTURE_BUFFER, Buffer::UV, Buffer::FLOAT);
+    m_buffer.LinkBuffer("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
+    m_buffer.LinkBuffer("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGB, Buffer::DataType::FloatData);
+    m_buffer.LinkBuffer("textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
 
     m_texture.Load( "textures/wood1.png");
     
@@ -112,7 +112,7 @@ void Quad::Render()
     Shader::Instance()->SendUniformData("material.specular", m_specular.r, m_specular.g, m_specular.b);
 
     m_texture.Bind();
-    m_buffer.Render(Buffer::TRIANGLES);
+    m_buffer.Render(Buffer::DrawType::Triangles);
     m_texture.Unbind();
 }
 

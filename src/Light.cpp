@@ -18,10 +18,10 @@ Light::Light()
     GLfloat colors[] = { 1.0f, 1.0f, 1.0f  };
 
     m_buffer.CreateBuffer(1);
-    m_buffer.FillVBO(Buffer::VERTEX_BUFFER, vertices, sizeof(vertices), Buffer::SINGLE); 
-    m_buffer.FillVBO(Buffer::COLOR_BUFFER, colors, sizeof(colors), Buffer::SINGLE);
-    m_buffer.LinkBuffer("vertexIn", Buffer::VERTEX_BUFFER, Buffer::XYZ, Buffer::FLOAT);
-    m_buffer.LinkBuffer("colorIn", Buffer::COLOR_BUFFER, Buffer::RGB, Buffer::FLOAT);
+    m_buffer.FillVBO(Buffer::VBOType::VertexBuffer, vertices, sizeof(vertices), Buffer::FillType::Once); 
+    m_buffer.FillVBO(Buffer::VBOType::ColorBuffer, colors, sizeof(colors), Buffer::FillType::Once);
+    m_buffer.LinkBuffer("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
+    m_buffer.LinkBuffer("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGB, Buffer::DataType::FloatData);
 }
 
 Light::~Light()
@@ -72,7 +72,7 @@ void Light::Render()
     Shader::Instance()->SendUniformData("isTextured", false);
 
     glPointSize(20.0f);
-    m_buffer.Render(Buffer::POINTS);
+    m_buffer.Render(Buffer::DrawType::Points);
 }
 
 

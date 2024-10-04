@@ -27,11 +27,11 @@ void Buffer::FillVBO(VBOType vboType, GLfloat *data, GLsizeiptr bufferSize, Fill
 {
     glBindVertexArray(m_VAO); //bind the 2 VBOs in VAO
    
-        if(vboType == VERTEX_BUFFER)
+        if(vboType == VBOType::VertexBuffer)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
         }
-        else if(vboType == COLOR_BUFFER)
+        else if(vboType == VBOType::ColorBuffer)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
         }
@@ -40,7 +40,7 @@ void Buffer::FillVBO(VBOType vboType, GLfloat *data, GLsizeiptr bufferSize, Fill
             glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
         }
 
-        glBufferData(GL_ARRAY_BUFFER, bufferSize, data, fillType); //take raw data(array) and put in VBO
+        glBufferData(GL_ARRAY_BUFFER, bufferSize, data, static_cast<GLenum>(fillType)); //take raw data(array) and put in VBO
     
     glBindVertexArray(0);
 }
@@ -55,11 +55,11 @@ void Buffer::LinkBuffer(const std::string& attribute, VBOType vboType,
    
     glBindVertexArray(m_VAO);
     
-        if(vboType == VERTEX_BUFFER)
+        if(vboType == VBOType::VertexBuffer)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
         }
-        else if(vboType == COLOR_BUFFER)
+        else if(vboType == VBOType::ColorBuffer)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
         }
@@ -69,7 +69,7 @@ void Buffer::LinkBuffer(const std::string& attribute, VBOType vboType,
         }
 
         // link VBO with the vertex Attribute so the shaders know whats coming in
-        glVertexAttribPointer(ID, componentType, GL_FLOAT, GL_FALSE, 0, nullptr); //normalized=false //nullptr=start at the begin
+        glVertexAttribPointer(ID, static_cast<GLint>(componentType), GL_FLOAT, GL_FALSE, 0, nullptr); //normalized=false //nullptr=start at the begin
         glEnableVertexAttribArray(ID);
 
     glBindVertexArray(0);
@@ -79,7 +79,7 @@ void Buffer::LinkBuffer(const std::string& attribute, VBOType vboType,
 void Buffer::Render(DrawType drawType)
 {
     glBindVertexArray(m_VAO); 
-    glDrawArrays(drawType, 0, m_totalVertices); //0=start 
+    glDrawArrays(static_cast<GLenum>(drawType), 0, m_totalVertices); //0=start 
     glBindVertexArray(0);
 
 }

@@ -8,15 +8,15 @@ class Buffer
 {
 
 public:
-    enum VBOType { VERTEX_BUFFER, COLOR_BUFFER, TEXTURE_BUFFER };
+    enum class VBOType { VertexBuffer, ColorBuffer, TextureBuffer };
 
-    enum ComponentType { XY = 2, XYZ = 3, RGB = 3, RGBA = 4, UV = 2};
+    enum class ComponentType { XY = 2, XYZ = 3, RGB = 3, RGBA = 4, UV = 2};
 
-    enum FillType { SINGLE = GL_STATIC_DRAW, MULTIPLE = GL_DYNAMIC_DRAW };
+    enum class FillType { Once = GL_STATIC_DRAW, Ongoing = GL_DYNAMIC_DRAW };
 
-    enum DataType { INT = GL_INT, FLOAT = GL_FLOAT, UNSIGNED_INT = GL_UNSIGNED_INT };
+    enum class DataType { IntData = GL_INT, FloatData = GL_FLOAT, UnsignedInt = GL_UNSIGNED_INT };
 
-    enum DrawType { POINTS = GL_POINTS, TRIANGLES = GL_TRIANGLES, LINES = GL_LINES };
+    enum class  DrawType { Points = GL_POINTS, Triangles = GL_TRIANGLES, Lines = GL_LINES };
 
 public:
     Buffer();
