@@ -16,9 +16,9 @@ struct Material
     vec3 specular;
 };
 
-in vec3 colorOut;
-in vec2 textureOut;
+in vec4 colorOut;
 in vec3 vertexOut;
+in vec2 textureOut;
 out vec4 fragColor;
 
 uniform Light light;
@@ -63,7 +63,7 @@ void main()
     }
     else
     {
-    	fragColor = vec4(colorOut, 1.0);
+    	fragColor = colorOut;
     }
     
         

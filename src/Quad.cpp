@@ -26,10 +26,10 @@ Quad::Quad()
                          [9]=0.0f, [10]=1.1f, [11]=1.1f,
                          [12]=0.0f, [13]=0.0f, [14]=1.0f,
                          [15]=0.0f, [16]=1.0f, [17]=0.f };*/
-   GLfloat colors[] = { 1.0f, 0.0f, 0.0f,
-                         0.0f, 0.0f, 1.0f,
-                         0.0f, 1.0f, 0.0f,
-                         0.0f, 1.0f, 1.0f };
+   GLfloat colors[] = { 1.0f, 0.0f, 0.0f, 1.0f,
+                         0.0f, 0.0f, 1.0f, 1.0f,
+                         0.0f, 1.0f, 0.0f, 1.0f,
+                         0.0f, 1.0f, 1.0f, 1.0f };
    /*GLfloat colors[] = { [0]=1.0f, [1]=1.0f, [2]=1.0f,
                          [3]=1.0f, [4]=1.0f, [5]=1.0f,
                          [6]=1.0f, [7]=1.0f, [8]=1.0f,
@@ -61,7 +61,7 @@ Quad::Quad()
 
     m_buffer.LinkEBO();
     m_buffer.LinkVBO("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
-    m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGB, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);
     m_buffer.LinkVBO("textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
 
     m_texture.Load( "textures/wood1.png");

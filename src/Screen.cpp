@@ -63,9 +63,15 @@ bool Screen::Initialize()
     {
         std::cout <<"Error Glad loading extensions" <<std::endl;
     }
-    
+   
+
     glEnable(GL_DEPTH_TEST);
-        
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //1-ALPHA how intense transparency of fragment is
+    //2-calculate the remaining transparency value based on full transparency of 1
+
     return true;
 }
 

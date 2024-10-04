@@ -37,35 +37,35 @@ Cube::Cube()
                             -0.5f, -0.5f, -0.5f };
 
 
-    GLfloat colors[] = { 1.0f, 0.0f, 0.0f,   //front
-                         1.0f, 0.0f, 0.0f,
-                         1.0f, 0.0f, 0.0f,
-                         1.0f, 0.0f, 0.0f,
+    GLfloat colors[] = { 1.0f, 0.0f, 0.0f, 1.0f,   //front
+                         1.0f, 0.0f, 0.0f, 1.0f,
+                         1.0f, 0.0f, 0.0f, 1.0f,
+                         1.0f, 0.0f, 0.0f, 1.0f,
 
-                         0.0f, 1.0f, 0.0f,   //back
-                         0.0f, 1.0f, 0.0f,
-                         0.0f, 1.0f, 0.0f,
-                         0.0f, 1.0f, 0.0f,
+                         0.0f, 1.0f, 0.0f, 1.0f,   //back
+                         0.0f, 1.0f, 0.0f, 1.0f,
+                         0.0f, 1.0f, 0.0f, 1.0f,
+                         0.0f, 1.0f, 0.0f, 1.0f,
 
-                         0.0f, 0.0f, 1.0f,   //left
-                         0.0f, 0.0f, 1.0f,
-                         0.0f, 0.0f, 1.0f,
-                         0.0f, 0.0f, 1.0f,
+                         0.0f, 0.0f, 1.0f, 1.0f,   //left
+                         0.0f, 0.0f, 1.0f, 1.0f,
+                         0.0f, 0.0f, 1.0f, 1.0f,
+                         0.0f, 0.0f, 1.0f, 1.0f,
 
-                         1.0f, 1.0f, 0.0f,  //right
-                         1.0f, 1.0f, 0.0f,
-                         1.0f, 1.0f, 0.0f,
-                         1.0f, 1.0f, 0.0f,
+                         1.0f, 1.0f, 0.0f, 1.0f,  //right
+                         1.0f, 1.0f, 0.0f, 1.0f,
+                         1.0f, 1.0f, 0.0f, 1.0f,
+                         1.0f, 1.0f, 0.0f, 1.0f,
 
-                         1.0f, 0.0f, 1.0f,   //top
-                         1.0f, 0.0f, 1.0f,
-                         1.0f, 0.0f, 1.0f,
-                         1.0f, 0.0f, 1.0f,
+                         1.0f, 0.0f, 1.0f, 1.0f,   //top
+                         1.0f, 0.0f, 1.0f, 1.0f,
+                         1.0f, 0.0f, 1.0f, 1.0f,
+                         1.0f, 0.0f, 1.0f, 1.0f,
 
-                         0.0f, 1.0f, 1.0f,   //bottom
-                         0.0f, 1.0f, 1.0f,
-                         0.0f, 1.0f, 1.0f,
-                         0.0f, 1.0f, 1.0f  };
+                         0.0f, 1.0f, 1.0f, 1.0f,   //bottom
+                         0.0f, 1.0f, 1.0f, 1.0f,
+                         0.0f, 1.0f, 1.0f, 1.0f,
+                         0.0f, 1.0f, 1.0f, 1.0f  };
 
     GLuint indices[] = {  0,  1,  3,  3,  1,  2,  
                           4,  5,  7,  7,  5,  6,
@@ -81,7 +81,7 @@ Cube::Cube()
     
     m_buffer.LinkEBO();
     m_buffer.LinkVBO("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
-    m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGB, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);
 
     m_position = glm::vec3(0.0f);
 }
