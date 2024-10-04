@@ -102,8 +102,6 @@ int main(int argc, char* argv[])
         quad.Render();
         
         //////////////////////////////////////////////////////
-        
-
         Screen::Instance()->Present();    
     }
 

@@ -1,48 +1,68 @@
 #include "Quad.hpp"
 #include "Buffer.hpp"
 #include "Shader.hpp"
-#include "Input.hpp"
+//#include "Input.hpp"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/vector_float3.hpp>
 
 
 Quad::Quad()
 {
-    GLfloat vertices[] = { [0]=-0.5f,  [1]=0.5f, [2]=0.0f, //t1
+    /*GLfloat vertices[] = { [0]=-0.5f,  [1]=0.5f, [2]=0.0f, //t1
                            [3]=0.5f,  [4]=0.5f, [5]=0.0f,
                            [6]=-0.5f, [7]=-0.5f, [8]=0.0f,
                            [9]=-0.5f, [10]=-0.5f, [11]=0.0f, //t2
                            [12]=0.5f,  [13]=0.5f, [14]=0.0f,
-                           [15]=0.5f, [16]=-0.5f, [17]=0.0f };
-    
+                           [15]=0.5f, [16]=-0.5f, [17]=0.0f };*/
+    GLfloat vertices[] = { -0.5f,  0.5f, 0.0f, //t1
+                           0.5f,  0.5f, 0.0f,
+                           0.5f, -0.5f, 0.0f,
+                           -0.5f, -0.5f, 0.0f };
+
+
    /*GLfloat colors[] = { [0]=1.0f, [1]=0.0f, [2]=0.0f,
                          [3]=0.0f, [4]=0.0f, [5]=1.0f,
                          [6]=0.0f, [7]=1.0f, [8]=1.0f,
                          [9]=0.0f, [10]=1.1f, [11]=1.1f,
                          [12]=0.0f, [13]=0.0f, [14]=1.0f,
                          [15]=0.0f, [16]=1.0f, [17]=0.f };*/
-   GLfloat colors[] = { [0]=1.0f, [1]=1.0f, [2]=1.0f,
+   GLfloat colors[] = { 1.0f, 0.0f, 0.0f,
+                         0.0f, 0.0f, 1.0f,
+                         0.0f, 1.0f, 0.0f,
+                         0.0f, 1.0f, 1.0f };
+   /*GLfloat colors[] = { [0]=1.0f, [1]=1.0f, [2]=1.0f,
                          [3]=1.0f, [4]=1.0f, [5]=1.0f,
                          [6]=1.0f, [7]=1.0f, [8]=1.0f,
                          [9]=1.0f, [10]=1.1f, [11]=1.1f,
                          [12]=1.0f, [13]=1.0f, [14]=1.0f,
-                         [15]=1.0f, [16]=1.0f, [17]=1.0f };
+                         [15]=1.0f, [16]=1.0f, [17]=1.0f };*/
 
+    /*GLfloat UVs[] = { 0.0f, 1.0f,
+                      1.0f, 1.0f,
+                      0.0f, 0.0f,
+                      0.0f, 0.0f,
+                      1.0f, 1.0f,
+                      1.0f, 0.0f};*/
     GLfloat UVs[] = { 0.0f, 1.0f,
                       1.0f, 1.0f,
-                      0.0f, 0.0f,
-                      0.0f, 0.0f,
-                      1.0f, 1.0f,
-                      1.0f, 0.0f};
+                      1.0f, 0.0f,
+                      0.0f, 0.0f};
 
-    m_buffer.CreateBuffer(6);
+    GLuint indices[] = { 0, 1, 3,
+                          3, 1, 2 };
+
+
+    m_buffer.CreateBuffer(6, true); //true hasEBO
+    
+    m_buffer.FillEBO(indices, sizeof(indices), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::VertexBuffer, vertices, sizeof(vertices), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::ColorBuffer, colors, sizeof(colors), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::TextureBuffer, UVs, sizeof(UVs), Buffer::FillType::Once);
 
-    m_buffer.LinkBuffer("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
-    m_buffer.LinkBuffer("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGB, Buffer::DataType::FloatData);
-    m_buffer.LinkBuffer("textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
+    m_buffer.LinkEBO();
+    m_buffer.LinkVBO("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGB, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO("textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
 
     m_texture.Load( "textures/wood1.png");
     
@@ -93,7 +113,7 @@ void Quad::Update()
     m_model = glm::mat4(1.0f);
    
     m_model = glm::translate(m_model, m_position);
-    m_model = glm::rotate(m_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));//rotate 90 on the X axis
+    m_model = glm::rotate(m_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));//rotate 90 on the X axis
     //m_model = glm::translate(m_model, glm::vec3(-0.25f, 0.25f, 0.0f));
     //m_model = glm::rotate(m_model, glm::radians(m_model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
     //m_model = glm::scale(m_model, glm::vec3(0.5f, 0.5f, 1.0f));
@@ -103,8 +123,8 @@ void Quad::Update()
 void Quad::Render()
 {
     Shader::Instance()->SendUniformData("model", m_model);
-    Shader::Instance()->SendUniformData("isLit", true);
-    Shader::Instance()->SendUniformData("isTextured", true);
+    Shader::Instance()->SendUniformData("isLit", false);
+    Shader::Instance()->SendUniformData("isTextured", false);
 
     Shader::Instance()->SendUniformData("material.shininess", m_shininess);
     Shader::Instance()->SendUniformData("material.ambient", m_ambient.r, m_ambient.g, m_ambient.b);
