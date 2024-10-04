@@ -4,6 +4,7 @@ in vec3 vertexIn;
 in vec3 colorIn;
 in vec2 textureIn;
 
+out vec3 vertexOut;
 out vec3 colorOut;
 out vec2 textureOut;
 
@@ -15,5 +16,8 @@ void main()
 {
     colorOut = colorIn;
     textureOut = textureIn;
+    
+    vertexOut = (model * vec4(vertexIn, 1.0)).xyz;
+    
     gl_Position = proj * view * model * vec4(vertexIn, 1.0);
 };

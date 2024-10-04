@@ -10,6 +10,7 @@
 #include "Shader.hpp"
 #include "Quad.hpp"
 #include "Camera.hpp"
+#include "Light.hpp"
 
 
 
@@ -62,6 +63,8 @@ int main(int argc, char* argv[])
     
     camera.Set3DView();
 
+    Light light;
+
     ////////////////////////////////////////////////////////
 
 
@@ -90,6 +93,10 @@ int main(int argc, char* argv[])
 
         // update/render /////////////////////////////////////
         camera.Update();
+        
+        light.Update();
+        light.Render();
+        light.SendToShader();
 
         quad.Update();
         quad.Render();
