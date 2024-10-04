@@ -63,14 +63,16 @@ bool Screen::Initialize()
     {
         std::cout <<"Error Glad loading extensions" <<std::endl;
     }
-
+    
+    glEnable(GL_DEPTH_TEST);
+        
     return true;
 }
 
 
 void Screen::ClearScreen()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 

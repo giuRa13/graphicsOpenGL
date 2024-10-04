@@ -11,6 +11,7 @@
 #include "Quad.hpp"
 #include "Camera.hpp"
 #include "Light.hpp"
+#include "Cube.hpp"
 
 
 
@@ -59,6 +60,7 @@ int main(int argc, char* argv[])
     /////////////////////////////////////////////////////////
     
     Quad quad;
+    Cube cube;
     Camera camera;
     
     camera.Set3DView();
@@ -98,9 +100,10 @@ int main(int argc, char* argv[])
         light.Render();
         light.SendToShader();
 
-        quad.Update();
-        quad.Render();
-        
+        //quad.Update();
+        //quad.Render();
+        cube.Update();
+        cube.Render();
         //////////////////////////////////////////////////////
         Screen::Instance()->Present();    
     }
