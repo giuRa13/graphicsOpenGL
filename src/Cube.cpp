@@ -1,7 +1,10 @@
 #include "Cube.hpp"
 #include "Buffer.hpp"
 #include "Shader.hpp"
+#include "Input.hpp"
+#include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/trigonometric.hpp>
 
 
 Cube::Cube()
@@ -68,6 +71,25 @@ Cube::Cube()
                          0.0f, 1.0f, 1.0f, 1.0f  };
 
     
+    GLfloat UVs[] = { 0.0f, 1.0f, 1.0f, 1.0f,
+                      1.0f, 0.0f, 0.0f, 0.0f,
+
+                      0.0f, 1.0f, 1.0f, 1.0f,
+                      1.0f, 0.0f, 0.0f, 0.0f, 
+   
+                      0.0f, 1.0f, 1.0f, 1.0f,
+                      1.0f, 0.0f, 0.0f, 0.0f, 
+
+                      0.0f, 1.0f, 1.0f, 1.0f,
+                      1.0f, 0.0f, 0.0f, 0.0f, 
+    
+                      0.0f, 1.0f, 1.0f, 1.0f,
+                      1.0f, 0.0f, 0.0f, 0.0f, 
+
+                      0.0f, 1.0f, 1.0f, 1.0f,
+                      1.0f, 0.0f, 0.0f, 0.0f  };
+
+    
     GLfloat normals[] = { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
                           0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 
 
@@ -98,15 +120,20 @@ Cube::Cube()
     m_buffer.FillEBO(indices,  sizeof(indices), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::VertexBuffer, vertices, sizeof(vertices), Buffer::FillType::Once);    
     m_buffer.FillVBO(Buffer::VBOType::ColorBuffer, colors, sizeof(colors), Buffer::FillType::Once);
+    m_buffer.FillVBO(Buffer::VBOType::TextureBuffer, UVs, sizeof(UVs), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::NormalBuffer, normals, sizeof(normals), Buffer::FillType::Once);
 
     m_buffer.LinkEBO();
     m_buffer.LinkVBO("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
     m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO("textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
     m_buffer.LinkVBO("normalIn",Buffer::VBOType::NormalBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
+
+    m_texture.Load("textures/wood1.png");
 
     m_shininess = 50.0f;
     m_position = glm::vec3(0.0f);
+    m_rotation = glm::vec3(0.0f);
     m_ambient = glm::vec3(0.4f, 0.4f, 0.4f); //shade of gray
     m_diffuse = glm::vec3(0.1f, 0.7f, 0.2f); //more green
     m_specular = glm::vec3(0.8f, 0.8f, 0.8f); //almost white
@@ -122,23 +149,36 @@ Cube::~Cube()
 
 void Cube::Update()
 {
+    if(Input::Instance()->IsLeftButtonClicked())
+    {
+        m_rotation.x += Input::Instance()->GetMouseMotionY();
+        m_rotation.y += Input::Instance()->GetMouseMotionX();
+    }
+    
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(m_model, m_position);
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_normal = glm::inverse(glm::mat3(m_model));
 }
 
 
 void Cube::Render()
 {
     Shader::Instance()->SendUniformData("model", m_model);
+    Shader::Instance()->SendUniformData("normal", m_normal);
+
     Shader::Instance()->SendUniformData("isLit", true);
-    Shader::Instance()->SendUniformData("isTextured", false);
+    Shader::Instance()->SendUniformData("isTextured", true);
     
     Shader::Instance()->SendUniformData( "material.shininess", m_shininess);
     Shader::Instance()->SendUniformData("material.ambient", m_ambient.r, m_ambient.g, m_ambient.b);
     Shader::Instance()->SendUniformData("material.diffuse", m_diffuse.r, m_diffuse.g, m_diffuse.b);
     Shader::Instance()->SendUniformData( "material.specular", m_specular.r, m_specular.g, m_specular.b);
 
+    m_texture.Bind();
     m_buffer.Render(Buffer::DrawType::Triangles);
+    m_texture.Unbind();
 }
 
 

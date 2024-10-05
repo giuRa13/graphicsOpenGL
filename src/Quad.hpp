@@ -22,6 +22,8 @@ private:
     Texture m_texture;
 
     glm::mat4 m_model;
+    glm::mat3 m_normal;
+   
     glm::vec3 m_position;
     
     float m_shininess;

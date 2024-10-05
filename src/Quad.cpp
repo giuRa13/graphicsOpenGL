@@ -121,6 +121,8 @@ void Quad::Update()
    
     m_model = glm::translate(m_model, m_position);
     m_model = glm::rotate(m_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));//rotate 90 on the X axis
+    m_normal = glm::inverse(glm::mat3(m_model));
+    
     //m_model = glm::translate(m_model, glm::vec3(-0.25f, 0.25f, 0.0f));
     //m_model = glm::rotate(m_model, glm::radians(m_model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
     //m_model = glm::scale(m_model, glm::vec3(0.5f, 0.5f, 1.0f));
@@ -130,6 +132,8 @@ void Quad::Update()
 void Quad::Render()
 {
     Shader::Instance()->SendUniformData("model", m_model);
+    Shader::Instance()->SendUniformData("normal", m_normal);
+    
     Shader::Instance()->SendUniformData("isLit", false);
     Shader::Instance()->SendUniformData("isTextured", false);
 

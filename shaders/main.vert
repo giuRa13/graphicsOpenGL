@@ -13,12 +13,13 @@ out vec3 normalOut;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
+uniform mat3 normal;
 
 void main()
 {
     colorOut = colorIn;
     textureOut = textureIn;
-    normalOut = normalIn;
+    normalOut = normalize(normal * normalIn);
     
     vertexOut = (model * vec4(vertexIn, 1.0)).xyz;
     
