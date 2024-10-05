@@ -67,6 +67,26 @@ Cube::Cube()
                          0.0f, 1.0f, 1.0f, 1.0f,
                          0.0f, 1.0f, 1.0f, 1.0f  };
 
+    
+    GLfloat normals[] = { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+                          0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 
+
+                          0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f,
+                          0.0f, 0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 
+
+                          -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+                          -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 
+
+                          1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                          1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 
+
+                          0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+                          0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 
+
+                          0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f,
+                          0.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f  };
+
+
     GLuint indices[] = {  0,  1,  3,  3,  1,  2,  
                           4,  5,  7,  7,  5,  6,
                           8,  9, 11, 11,  9, 10,
@@ -78,12 +98,19 @@ Cube::Cube()
     m_buffer.FillEBO(indices,  sizeof(indices), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::VertexBuffer, vertices, sizeof(vertices), Buffer::FillType::Once);    
     m_buffer.FillVBO(Buffer::VBOType::ColorBuffer, colors, sizeof(colors), Buffer::FillType::Once);
-    
+    m_buffer.FillVBO(Buffer::VBOType::NormalBuffer, normals, sizeof(normals), Buffer::FillType::Once);
+
     m_buffer.LinkEBO();
     m_buffer.LinkVBO("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
     m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO("normalIn",Buffer::VBOType::NormalBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
 
+    m_shininess = 50.0f;
     m_position = glm::vec3(0.0f);
+    m_ambient = glm::vec3(0.4f, 0.4f, 0.4f); //shade of gray
+    m_diffuse = glm::vec3(0.1f, 0.7f, 0.2f); //more green
+    m_specular = glm::vec3(0.8f, 0.8f, 0.8f); //almost white
+
 }
 
 
@@ -103,8 +130,14 @@ void Cube::Update()
 void Cube::Render()
 {
     Shader::Instance()->SendUniformData("model", m_model);
-    Shader::Instance()->SendUniformData("isLit", false);
+    Shader::Instance()->SendUniformData("isLit", true);
     Shader::Instance()->SendUniformData("isTextured", false);
+    
+    Shader::Instance()->SendUniformData( "material.shininess", m_shininess);
+    Shader::Instance()->SendUniformData("material.ambient", m_ambient.r, m_ambient.g, m_ambient.b);
+    Shader::Instance()->SendUniformData("material.diffuse", m_diffuse.r, m_diffuse.g, m_diffuse.b);
+    Shader::Instance()->SendUniformData( "material.specular", m_specular.r, m_specular.g, m_specular.b);
+
     m_buffer.Render(Buffer::DrawType::Triangles);
 }
 

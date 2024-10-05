@@ -8,7 +8,7 @@ class Buffer
 {
 
 public:
-    enum class VBOType { VertexBuffer, ColorBuffer, TextureBuffer };
+    enum class VBOType { VertexBuffer, ColorBuffer, TextureBuffer, NormalBuffer };
 
     enum class ComponentType { XY = 2, XYZ = 3, RGB = 3, RGBA = 4, UV = 2};
 
@@ -51,9 +51,11 @@ private:
 
     GLuint m_VAO;
     GLuint m_EBO;
+
     GLuint m_vertexVBO;
     GLuint m_colorVBO;
     GLuint m_textureVBO;
+    GLuint m_normalVBO;
     GLuint m_totalVertices;
 };
 

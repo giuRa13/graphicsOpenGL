@@ -6,9 +6,14 @@ Buffer::Buffer()
 {
     m_VAO = 0;
     m_EBO = 0;
+
     m_vertexVBO = 0;
     m_colorVBO = 0;
-    m_textureVBO = 0,
+    m_textureVBO = 0;
+    m_normalVBO = 0;
+    // a normal is just Direction Vector (doesn't have real position in space, just help orinting a face)
+    // normalize =  (prodotto scalare tra due vettori da il perpendicolare)
+
     m_totalVertices = 0;
     m_hasEBO = false;
 }
@@ -20,6 +25,7 @@ void Buffer::CreateBuffer(GLuint totalVertices, bool hasEBO)
     glGenBuffers(1, &m_vertexVBO);
     glGenBuffers(1, &m_colorVBO);
     glGenBuffers(1, &m_textureVBO);
+    glGenBuffers(1, &m_normalVBO);
     glGenVertexArrays(1, &m_VAO);
     
     if(hasEBO)
@@ -51,9 +57,13 @@ void Buffer::FillVBO(VBOType vboType, GLfloat *data, GLsizeiptr bufferSize, Fill
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
         }
-        else 
+        else if (vboType == VBOType::TextureBuffer)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
+        }
+        else 
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
         }
 
         glBufferData(GL_ARRAY_BUFFER, bufferSize, data, static_cast<GLenum>(fillType)); //take raw data(array) and put in VBO
@@ -87,9 +97,13 @@ void Buffer::LinkVBO(const std::string& attribute, VBOType vboType,
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
         }
-        else 
+        else if(vboType == VBOType::TextureBuffer)
         {
             glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
+        }
+        else 
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
         }
 
         // link VBO with the vertex Attribute so the shaders know whats coming in
@@ -122,6 +136,7 @@ void Buffer::DestroyBuffer()
     glDeleteBuffers(1, &m_vertexVBO);
     glDeleteBuffers(1, &m_colorVBO);
     glDeleteBuffers(1, &m_textureVBO);
+    glDeleteBuffers(1, &m_normalVBO);
     glDeleteVertexArrays(1, &m_VAO);
     glDeleteBuffers(1, &m_EBO);
 }

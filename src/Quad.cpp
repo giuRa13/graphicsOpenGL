@@ -37,6 +37,11 @@ Quad::Quad()
                          [12]=1.0f, [13]=1.0f, [14]=1.0f,
                          [15]=1.0f, [16]=1.0f, [17]=1.0f };*/
 
+    GLfloat normals[] = { 0.0f, 0.0f, 1.0f,
+                          0.0f ,0.0f, 1.0f,
+                          0.0f, 0.0f, 1.0f,
+                          0.0f, 0.0f, 1.0f  };
+
     /*GLfloat UVs[] = { 0.0f, 1.0f,
                       1.0f, 1.0f,
                       0.0f, 0.0f,
@@ -58,11 +63,13 @@ Quad::Quad()
     m_buffer.FillVBO(Buffer::VBOType::VertexBuffer, vertices, sizeof(vertices), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::ColorBuffer, colors, sizeof(colors), Buffer::FillType::Once);
     m_buffer.FillVBO(Buffer::VBOType::TextureBuffer, UVs, sizeof(UVs), Buffer::FillType::Once);
+    m_buffer.FillVBO(Buffer::VBOType::NormalBuffer, normals, sizeof(normals), Buffer::FillType::Once);
 
     m_buffer.LinkEBO();
     m_buffer.LinkVBO("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
     m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);
     m_buffer.LinkVBO("textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO("normalIn", Buffer::VBOType::NormalBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
 
     m_texture.Load( "textures/wood1.png");
     

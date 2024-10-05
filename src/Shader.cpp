@@ -199,7 +199,7 @@ bool Shader::SendUniformData(const std::string& uniformName, GLfloat data)
         return false;
     }
 
-    glUniform1i(ID, data);
+    glUniform1f(ID, data);
     return true;
 }
 
