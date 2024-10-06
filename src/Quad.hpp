@@ -3,6 +3,7 @@
 #include "../include/glad/glad.h"
 #include "Buffer.hpp"
 #include "Texture.hpp"
+#include "Shader.hpp"
 #include <glm/glm.hpp>
 #include <glm/trigonometric.hpp>
 
@@ -14,7 +15,7 @@ public:
     ~Quad();
 
     void Update();
-    void Render();
+    void Render(const Shader& shader);
 
 
 private:

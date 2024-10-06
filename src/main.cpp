@@ -1,6 +1,6 @@
 //g++ main.cpp -o main.o -lSDL2 -lGL 
 //g++ ./src/*.cpp ./src/glad.c -I./src/*.hpp -I./include -o main.exe -lSDL2 
-
+//g++ ./src/*.cpp ./src/glad.c -I./src/*.hpp -I./include -o main.exe -lSDL2 -lSDL2_image
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "../include/glad/glad.h"
@@ -14,10 +14,6 @@
 #include "Cube.hpp"
 
 
-
-bool isRunning = true;
-
-
 void GetOpenGLVersionInfo()
 {
     std::cout <<"Vendor: " <<glGetString(GL_VENDOR) <<std::endl;
@@ -28,6 +24,10 @@ void GetOpenGLVersionInfo()
 }
 
 
+
+bool isRunning = true;
+
+
 int main(int argc, char* argv[])
 {
 
@@ -35,30 +35,14 @@ int main(int argc, char* argv[])
 
     GetOpenGLVersionInfo();
 
-    if(!Shader::Instance()->CreateProgram()) return 0;
-    if(!Shader::Instance()->CreateShaders()) return 0;
-    if(!Shader::Instance()->CompileShaders("shaders/main.vert", Shader::ShaderType::VERTEX_SHADER)) 
-    { 
-        //... 
-    };
-    if(!Shader::Instance()->CompileShaders("shaders/main.frag", Shader::ShaderType::FRAGMENT_SHADER))
-    {
-        //...
-    };
-
-    Shader::Instance()->AttachShaders();
-    
-    if(!Shader::Instance()->LinkProgram())
-    {
-        //...
-    };
+    Shader lightShader;
+    lightShader.Create("shaders/main.vert", "shaders/main.frag");
+    lightShader.Use();
 
     float xPos = 0.0f;
     float yPos = 0.0f;
 
-
     /////////////////////////////////////////////////////////
-    
     Quad quad;
     Cube cube;
     Camera camera;
@@ -66,7 +50,6 @@ int main(int argc, char* argv[])
     camera.Set3DView();
 
     Light light;
-
     ////////////////////////////////////////////////////////
 
 
@@ -95,24 +78,29 @@ int main(int argc, char* argv[])
 
         // update/render /////////////////////////////////////
         camera.Update();
-        
+        camera.SendToShader(lightShader);
+
         light.Update();
-        light.Render();
-        light.SendToShader();
+        light.Render(lightShader);
+        light.SendToShader(lightShader);
 
         //quad.Update();
         //quad.Render();
         cube.Update();
-        cube.Render();
-        //////////////////////////////////////////////////////
+        cube.Render(lightShader);
+    
+
         Screen::Instance()->Present();    
+        //////////////////////////////////////////////////////
     }
 
-    Shader::Instance()->DetachShaders();
-    Shader::Instance()->DestroyShaders();
-    Shader::Instance()->DestroyProgram();
+
+    lightShader.Destroy();
 
     Screen::Instance()->Shutdown();
 
     return 0;
 }
+
+
+

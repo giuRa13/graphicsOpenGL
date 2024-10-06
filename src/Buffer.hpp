@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../include/glad/glad.h"
+#include "Shader.hpp"
 #include <string>
 
 
@@ -36,7 +37,7 @@ public:
     void LinkEBO();
 
     // glVertexAttribPointer()
-    void LinkVBO(const std::string& attribute,
+    void LinkVBO(const Shader& shader, const std::string& attribute,
                  VBOType vboType,
                  ComponentType componentType,
                  DataType dataType);

@@ -80,10 +80,10 @@ void Buffer::LinkEBO()
 }
 
 
-void Buffer::LinkVBO(const std::string& attribute, VBOType vboType,
-                        ComponentType componentType, DataType dataType)
+void Buffer::LinkVBO(const Shader& shader, const std::string& attribute, 
+                     VBOType vboType, ComponentType componentType, DataType dataType)
 {
-    GLuint shaderProgramID = Shader::Instance()->GetShaderProgramID();
+    GLuint shaderProgramID = shader.GetShaderProgramID();
     
     GLint ID = glGetAttribLocation(shaderProgramID, attribute.c_str()); //attribute="vertexIn", "colorIn"
    

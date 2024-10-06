@@ -66,10 +66,6 @@ Quad::Quad()
     m_buffer.FillVBO(Buffer::VBOType::NormalBuffer, normals, sizeof(normals), Buffer::FillType::Once);
 
     m_buffer.LinkEBO();
-    m_buffer.LinkVBO("vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
-    m_buffer.LinkVBO("colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);
-    m_buffer.LinkVBO("textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
-    m_buffer.LinkVBO("normalIn", Buffer::VBOType::NormalBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
 
     m_texture.Load( "textures/wood1.png");
     
@@ -129,18 +125,23 @@ void Quad::Update()
 }
 
 
-void Quad::Render()
+void Quad::Render(const Shader& shader)
 {
-    Shader::Instance()->SendUniformData("model", m_model);
-    Shader::Instance()->SendUniformData("normal", m_normal);
+    shader.SendUniformData("model", m_model);
+    shader.SendUniformData("normal", m_normal);
     
-    Shader::Instance()->SendUniformData("isLit", false);
-    Shader::Instance()->SendUniformData("isTextured", false);
+    shader.SendUniformData("isLit", false);
+    shader.SendUniformData("isTextured", false);
 
-    Shader::Instance()->SendUniformData("material.shininess", m_shininess);
-    Shader::Instance()->SendUniformData("material.ambient", m_ambient.r, m_ambient.g, m_ambient.b);
-    Shader::Instance()->SendUniformData("material.diffuse", m_diffuse.r, m_diffuse.g, m_diffuse.b);
-    Shader::Instance()->SendUniformData("material.specular", m_specular.r, m_specular.g, m_specular.b);
+    shader.SendUniformData("material.shininess", m_shininess);
+    shader.SendUniformData("material.ambient", m_ambient.r, m_ambient.g, m_ambient.b);
+    shader.SendUniformData("material.diffuse", m_diffuse.r, m_diffuse.g, m_diffuse.b);
+    shader.SendUniformData("material.specular", m_specular.r, m_specular.g, m_specular.b);
+
+    m_buffer.LinkVBO(shader, "vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO(shader, "colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO(shader, "textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
+    m_buffer.LinkVBO(shader, "normalIn", Buffer::VBOType::NormalBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
 
     m_texture.Bind();
     m_buffer.Render(Buffer::DrawType::Triangles);

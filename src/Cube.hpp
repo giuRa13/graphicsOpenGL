@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "Buffer.hpp"
 #include "Texture.hpp"
-
+#include "Shader.hpp"
 
 
 class Cube
@@ -15,7 +15,7 @@ public:
     ~Cube();
 
     void Update();
-    void Render();
+    void Render(const Shader& shader);
 
 
 private:

@@ -22,7 +22,6 @@ void Camera::Set3DView()
     GLfloat aspectRatio = 1280.0f / 720.0f;
 
     m_proj = glm::perspective(FOV, aspectRatio, 0.001f, 1000.0f); //front wall, back wall
-    Shader::Instance()->SendUniformData("proj", m_proj);
 }
 
 
@@ -58,8 +57,15 @@ void Camera::Update()
     }
 
     m_view = glm::lookAt(m_position, m_position + m_direction, m_up); //position, target, worldUp
-    Shader::Instance()->SendUniformData("view", m_view);
-    Shader::Instance()->SendUniformData("cameraPosition", m_position.x, m_position.y, m_position.z);
 }
+
+
+void Camera::SendToShader(const Shader& shader)
+{
+    shader.SendUniformData("proj", m_proj);
+    shader.SendUniformData("view", m_view);
+    shader.SendUniformData("cameraPosition", m_position.x, m_position.y, m_position.z);
+}
+
 
 

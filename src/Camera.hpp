@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "../include/glad/glad.h"
+#include "Shader.hpp"
 
 
 class Camera
@@ -13,6 +14,7 @@ public:
 
     void Set3DView();
     void Update();
+    void SendToShader(const Shader& shader);
 
 
 protected:

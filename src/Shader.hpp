@@ -9,42 +9,34 @@ class Shader
 {
 
 public:
-    enum class ShaderType {VERTEX_SHADER, FRAGMENT_SHADER};
-
-    static Shader* Instance();
-
-public:
-    GLuint GetShaderProgramID();
-
-    bool CreateProgram();
-    bool CreateShaders();
-
-    bool CompileShaders(const std::string& filename, ShaderType shaderType);
-    void AttachShaders();
-    bool LinkProgram();
-
-    void DetachShaders();
-    void DestroyShaders();
-    void DestroyProgram();
-
-    bool SendUniformData(const std::string& uniformName, GLint data);
-    bool SendUniformData(const std::string& uniformName, GLuint data);
-    bool SendUniformData(const std::string& uniformName, GLfloat data);
-    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y);
-    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y, GLfloat z);
-    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y, GLfloat z, GLfloat w);
-    bool SendUniformData(const std::string& uniformName, const glm::mat4& data);
-    bool SendUniformData(const std::string& uniformName, const glm::mat3& data);
-
-private:
+    enum class ShaderType {VertexShader, FragmentShader};
+   
     Shader();
-    Shader(const Shader&);
-    Shader& operator=(Shader&);
+    ~Shader(); 
+
+    GLuint GetShaderProgramID() const;
+
+    bool Create(const std::string& vertexShaderFilename, const std::string& fragmentShaderFilename);
+    
+    bool SendUniformData(const std::string& uniformName, GLint data) const;
+    bool SendUniformData(const std::string& uniformName, GLuint data) const;
+    bool SendUniformData(const std::string& uniformName, GLfloat data) const;
+    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y) const;
+    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y, GLfloat z) const;
+    bool SendUniformData(const std::string& uniformName, GLfloat x, GLfloat y, GLfloat z, GLfloat w) const;
+    bool SendUniformData(const std::string& uniformName, const glm::mat4& data) const;
+    bool SendUniformData(const std::string& uniformName, const glm::mat3& data) const;
+
+    void Use();
+    void Destroy();
 
 private:
+    bool LinkProgram();
+    bool CompileShaders(const std::string& filename, ShaderType shaderType);
+
     GLuint m_shaderProgramID;
-    GLuint m_vertexShaderID;
-    GLuint m_fragmentShaderID;
+    static GLuint s_vertexShaderID;
+    static GLuint s_fragmentShaderID;
 };
 
 
