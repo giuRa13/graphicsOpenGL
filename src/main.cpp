@@ -12,6 +12,8 @@
 #include "Camera.hpp"
 #include "Light.hpp"
 #include "Cube.hpp"
+#include "Model.hpp"
+
 
 
 void GetOpenGLVersionInfo()
@@ -46,7 +48,9 @@ int main(int argc, char* argv[])
     Quad quad;
     Cube cube;
     Camera camera;
-    
+    Model model;
+    model.Load("models/Armchair.obj");
+
     camera.Set3DView();
 
     Light light;
@@ -86,9 +90,12 @@ int main(int argc, char* argv[])
 
         //quad.Update();
         //quad.Render();
-        cube.Update();
-        cube.Render(lightShader);
+        
+        //cube.Update();
+        //cube.Render(lightShader);
     
+        model.Update();
+        model.Render(lightShader);
 
         Screen::Instance()->Present();    
         //////////////////////////////////////////////////////

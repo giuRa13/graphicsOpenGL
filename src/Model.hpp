@@ -61,11 +61,22 @@ public:
 
 private:
 
+    void FillBuffers();
     void SortVertexData(Mesh& newMesh, const Mesh& oldMesh, const std::vector<Face>& faces);
 
     std::vector<Mesh> m_meshes; //group of raw data
     std::vector<Buffer> m_buffers; //Sincronous (for every mesh group have a Buffer)
 
+    glm::mat4 m_model;
+    glm::mat3 m_normal;
+
+    glm::vec3 m_position;
+    glm::vec3 m_rotation;
+
+    float m_shininess;
+    glm::vec3 m_ambient;
+    glm::vec3 m_diffuse;
+    glm::vec3 m_specular;
 
 };
 
