@@ -30,10 +30,15 @@ public:
 
     // glBufferData()
     void FillVBO(VBOType vboType,
-                 GLfloat* data,
+                 const void* data,
                  GLsizeiptr bufferSize,
                  FillType fillType);
- 
+
+    void AppendVBO(VBOType vboType, 
+                   const void* data, 
+                   GLsizeiptr bufferSize, 
+                   GLuint offset);
+
     void LinkEBO();
 
     // glVertexAttribPointer()

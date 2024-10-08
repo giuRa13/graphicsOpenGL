@@ -45,7 +45,7 @@ void Buffer::FillEBO(const GLuint* data, GLsizeiptr bufferSize, FillType fill)
 }
 
 
-void Buffer::FillVBO(VBOType vboType, GLfloat *data, GLsizeiptr bufferSize, FillType fillType)
+void Buffer::FillVBO(VBOType vboType, const void* data, GLsizeiptr bufferSize, FillType fillType)
 {
     glBindVertexArray(m_VAO); //bind the 2 VBOs in VAO
    
@@ -68,6 +68,34 @@ void Buffer::FillVBO(VBOType vboType, GLfloat *data, GLsizeiptr bufferSize, Fill
 
         glBufferData(GL_ARRAY_BUFFER, bufferSize, data, static_cast<GLenum>(fillType)); //take raw data(array) and put in VBO
     
+    glBindVertexArray(0);
+}
+
+
+void Buffer::AppendVBO(VBOType vboType, const void* data, GLsizeiptr bufferSize, GLuint offset)
+{
+    glBindVertexArray(m_VAO);
+
+        if(vboType == VBOType::VertexBuffer)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
+        }
+        else if(vboType == VBOType::ColorBuffer)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
+        }
+        else if(GL_ARRAY_BUFFER, m_textureVBO)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
+        }
+        else 
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
+        }
+
+        // fill from a certain point (offset)
+        glBufferSubData(GL_ARRAY_BUFFER, offset, bufferSize, data);
+
     glBindVertexArray(0);
 }
 
@@ -107,7 +135,7 @@ void Buffer::LinkVBO(const Shader& shader, const std::string& attribute,
         }
 
         // link VBO with the vertex Attribute so the shaders know whats coming in
-        glVertexAttribPointer(ID, static_cast<GLint>(componentType), GL_FLOAT, GL_FALSE, 0, nullptr); //normalized=false //nullptr=start at the begin
+        glVertexAttribPointer(ID, static_cast<GLint>(componentType), static_cast<GLenum>(dataType), GL_FALSE, 0, nullptr); //normalized=false //nullptr=start at the begin
         glEnableVertexAttribArray(ID);
 
     glBindVertexArray(0);

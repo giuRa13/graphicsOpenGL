@@ -58,7 +58,7 @@ bool Screen::Initialize()
         return false;
     }
 
-    gladLoadGL();//return 0 or 1
+    gladLoadGL();
     if(!gladLoadGL())
     {
         std::cout <<"Error Glad loading extensions" <<std::endl;

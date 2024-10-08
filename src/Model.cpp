@@ -25,7 +25,7 @@ Model::Model()
 
 bool Model::Load(const std::string &filename)
 {
-    std::fstream file(filename, std::ios_base::in); // (read only)
+    std::fstream file( filename , std::ios_base::in); // (read only)
 
     if(!file)
     {
@@ -102,16 +102,27 @@ bool Model::Load(const std::string &filename)
             }
 
             //Material group
-            if(subStrings[0] == "usemtl1")//(use the foolowing material for the following faces)
+            if(subStrings[0] == "usemtl")//(use the foolowing material for the following faces)
             {
-                lastMaterialName = subStrings[1];
+                if(!m_materials.empty())
+                {
+                    for(const auto& material : m_materials)
+                    {
+                        if(material.GetName() == subStrings[1])
+                        {
+                            lastMaterialName = subStrings[1];
+                            break;
+                        }
+                    }
+                }
                 continue;
             }
 
             //Material file
             if (subStrings[0] == "mtllib")
             {
-                //load material file
+                Material material;
+                material.Load(subStrings[1], m_materials);
                 continue;
             }
 
@@ -168,7 +179,7 @@ void Model::Update()
     m_normal = glm::inverse(glm::mat3(m_model));
 }
 
-void Model::Render(const Shader &shader)
+void Model::Render(const Shader& shader)
 {
     shader.SendUniformData("model", m_model);
     shader.SendUniformData("normal", m_normal);
@@ -181,6 +192,7 @@ void Model::Render(const Shader &shader)
     shader.SendUniformData("material.diffuse", m_diffuse.r, m_diffuse.g, m_diffuse.b);
     shader.SendUniformData("material.specular", m_specular.r, m_specular.g, m_specular.b);
 
+    int count = 0;
     for (auto& buffer : m_buffers)
     {
         buffer.LinkEBO();
@@ -190,6 +202,25 @@ void Model::Render(const Shader &shader)
         buffer.LinkVBO(shader, "textureIn", Buffer::VBOType::TextureBuffer, Buffer::ComponentType::UV, Buffer::DataType::FloatData);
         buffer.LinkVBO(shader, "normalIn", Buffer::VBOType::NormalBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
 
+        for(auto mat : m_materials)
+        {
+            if(mat.GetName() == m_meshes[count].materialName)
+            {
+                mat.SendToShader(shader);
+
+                if(mat.IsTextured())
+                {
+                    shader.SendUniformData("isTextured", true);
+                    mat.GetDiffuseMap().Bind();
+                }
+                else 
+                {
+                    shader.SendUniformData("isTextured", false);
+                }
+                break;
+            }
+        }
+        count++;
         buffer.Render(Buffer::DrawType::Triangles);
     }
 }

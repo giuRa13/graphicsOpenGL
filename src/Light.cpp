@@ -3,8 +3,7 @@
 #include "Shader.hpp"
 #include "Input.hpp"
 #include <glm/glm.hpp>
-#include <glm/ext/matrix_transform.hpp>
-
+#include <glm/gtc/matrix_transform.hpp>
 
 
 Light::Light()

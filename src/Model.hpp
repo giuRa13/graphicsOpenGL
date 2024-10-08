@@ -6,6 +6,8 @@
 #include <vector>
 #include "Buffer.hpp"
 #include "Shader.hpp"
+#include "Material.hpp"
+
 
 struct Mesh
 {
@@ -66,6 +68,7 @@ private:
 
     std::vector<Mesh> m_meshes; //group of raw data
     std::vector<Buffer> m_buffers; //Sincronous (for every mesh group have a Buffer)
+    std::vector<Material> m_materials;
 
     glm::mat4 m_model;
     glm::mat3 m_normal;

@@ -9,7 +9,7 @@ Texture::Texture()
 }
 
 
-void Texture::Bind()
+void Texture::Bind() const
 {
     glBindTexture(GL_TEXTURE_2D, m_ID); 
 }

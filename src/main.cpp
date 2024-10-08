@@ -13,6 +13,7 @@
 #include "Light.hpp"
 #include "Cube.hpp"
 #include "Model.hpp"
+#include "Grid.hpp"
 
 
 
@@ -47,11 +48,15 @@ int main(int argc, char* argv[])
     /////////////////////////////////////////////////////////
     Quad quad;
     Cube cube;
-    Camera camera;
-    Model model;
-    model.Load("models/Armchair.obj");
+    
+    Grid grid;
 
+    Camera camera;
     camera.Set3DView();
+    
+    Model model;
+    model.Load("models/Cube.obj");
+    
 
     Light light;
     ////////////////////////////////////////////////////////
@@ -94,8 +99,11 @@ int main(int argc, char* argv[])
         //cube.Update();
         //cube.Render(lightShader);
     
-        model.Update();
-        model.Render(lightShader);
+        //model.Update();
+        //model.Render(lightShader);
+
+        grid.Update();
+        grid.Render(lightShader);
 
         Screen::Instance()->Present();    
         //////////////////////////////////////////////////////
