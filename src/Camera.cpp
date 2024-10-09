@@ -25,33 +25,39 @@ void Camera::Set3DView()
 }
 
 
+void Camera::SetSpeed(GLfloat speed)
+{
+    m_speed = speed;
+}
+
+
 void Camera::Update()
 {
     if(Input::Instance()->IsKeyPressed())
     {
         if(Input::Instance()->GetKeyDown() == 'a')
         {
-            m_position.x  -= 0.01f;
+            m_position.x  -= m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'd')
         {
-            m_position.x += 0.01f;
+            m_position.x += m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'w')
         {
-            m_position.y += 0.01f;
+            m_position.z -= m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 's')
         {
-            m_position.y -= 0.01f;
+            m_position.z += m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'q')
         {
-            m_position.z += 0.01f;
+            m_position.y += m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'e')
         {
-            m_position.z -= 0.01f;
+            m_position.y -= m_speed;
         }
 
     }

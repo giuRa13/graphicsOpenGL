@@ -26,6 +26,11 @@ Light::~Light()
     m_buffer.DestroyBuffer();
 }
 
+void Light::SetSpeed(GLfloat speed)
+{
+    m_speed = speed;
+}
+
 
 void Light::Update()
 {
@@ -33,27 +38,27 @@ void Light::Update()
     {
         if(Input::Instance()->GetKeyDown() == 'j')
         {
-            m_position.x  -= 0.01f;
+            m_position.x  -= m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'l')
         {
-            m_position.x += 0.01f;
+            m_position.x += m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'i')
         {
-            m_position.y += 0.01f;
+            m_position.y += m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'k')
         {
-            m_position.y -= 0.01f;
+            m_position.y -= m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'u')
         {
-            m_position.z += 0.01f;
+            m_position.z -= m_speed;
         }
         else if(Input::Instance()->GetKeyDown() == 'o')
         {
-            m_position.z -= 0.01f;
+            m_position.z += m_speed;
         }
     }
    

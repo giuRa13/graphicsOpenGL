@@ -38,27 +38,48 @@ int main(int argc, char* argv[])
 
     GetOpenGLVersionInfo();
 
+    Shader defaultShader;
+    defaultShader.Create("shaders/default.vert", "shaders/default.frag");
+    
     Shader lightShader;
-    lightShader.Create("shaders/main.vert", "shaders/main.frag");
-    lightShader.Use();
+    lightShader.Create("shaders/light.vert", "shaders/light.frag");
 
     float xPos = 0.0f;
     float yPos = 0.0f;
 
     /////////////////////////////////////////////////////////
-    Quad quad;
-    Cube cube;
     
+    Quad floor("Floor.jpg");
+    floor.SetRotation(90.0f, 0.0f, 0.0f);
+    floor.SetScale(25.0f, 25.0f, 1.0f);//(double of grid SIZE)
+    
+    Cube cube1("wood1.png");
+    cube1.SetPosition(-1.0f, 0.25f, -2.0f);
+    cube1.SetRotation(0.0f, 45.0f, 0.0f);
+    cube1.SetScale(0.5f, 0.5f, 0.5f);
+
+    Cube cube2("wood2.png");
+    cube2.SetPosition(-0.5f, 0.25f, -3.0f);
+    cube2.SetRotation(0.0f, 80.0f, 0.0f);
+    cube2.SetScale(0.5f, 0.5f, 0.5f);
+
+    Model cabinet;
+    cabinet.Load("models/Armchair.obj");
+    cabinet.SetPosition(3.0f, 0.25f, -3.0f);
+    cabinet.SetRotation(0.0f, 135.0f, 0.0f);
+
     Grid grid;
 
     Camera camera;
     camera.Set3DView();
-    
-    Model model;
-    model.Load("models/Cube.obj");
-    
+    camera.SetSpeed(0.1f);
 
+
+    //Model model;
+    //model.Load("models/Cabinet.obj");
+    
     Light light;
+    light.SetSpeed(0.1f);
     ////////////////////////////////////////////////////////
 
 
@@ -70,10 +91,13 @@ int main(int argc, char* argv[])
         
         char keyPressed = Input::Instance()->GetKeyDown();
 
-        if(Input::Instance()->IsXClicked())
+        isRunning = !Input::Instance()->IsXClicked();
+
+        /*if(Input::Instance()->IsLeftButtonClicked())
         {
-            isRunning = false;
-        }
+            m_rotation.x += Input::Instance()->GetMouseMotionY();
+             m_rotation.y += Input::Instance()->GetMouseMotionX();
+        }*/
 
         /*if(Input::Instance()->IsLeftButtonClicked())
         {
@@ -87,23 +111,26 @@ int main(int argc, char* argv[])
 
         // update/render /////////////////////////////////////
         camera.Update();
-        camera.SendToShader(lightShader);
-
         light.Update();
-        light.Render(lightShader);
-        light.SendToShader(lightShader);
 
         //quad.Update();
         //quad.Render();
-        
-        //cube.Update();
-        //cube.Render(lightShader);
-    
-        //model.Update();
-        //model.Render(lightShader);
+       
+        defaultShader.Use();
+        camera.SendToShader(defaultShader);
+      
+        grid.Render(defaultShader);
+        cube1.Render(defaultShader);
 
-        grid.Update();
-        grid.Render(lightShader);
+
+        lightShader.Use();
+        light.SendToShader(lightShader);
+        camera.SendToShader(lightShader);
+        
+        light.Render(lightShader);
+        floor.Render(lightShader);
+        cube2.Render(lightShader);
+        cabinet.Render(lightShader);
 
         Screen::Instance()->Present();    
         //////////////////////////////////////////////////////

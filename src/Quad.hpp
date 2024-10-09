@@ -1,36 +1,43 @@
 #pragma once
 
+
 #include "../include/glad/glad.h"
 #include "Buffer.hpp"
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include "Material.hpp"
 #include <glm/glm.hpp>
 #include <glm/trigonometric.hpp>
+#include <string>
 
-class Quad
+
+class Quad 
 {
 
 public:
-    Quad();
+    Quad(const std::string& textureFilename);
     ~Quad();
 
-    void Update();
+    void SetPosition(GLfloat x, GLfloat y, GLfloat z);
+    void SetRotation(GLfloat pitch, GLfloat yaw, GLfloat roll);
+    void SetScale(GLfloat x, GLfloat y, GLfloat z);
+
+    void Update() {};
     void Render(const Shader& shader);
 
 
 private:
     Buffer m_buffer;
     Texture m_texture;
+    Material m_material;    
 
     glm::mat4 m_model;
     glm::mat3 m_normal;
    
     glm::vec3 m_position;
-    
-    float m_shininess;
-    glm::vec3 m_ambient;
-    glm::vec3 m_diffuse;
-    glm::vec3 m_specular;
+    glm::vec3 m_rotation;
+    glm::vec3 m_scale;
+
 };
 
 

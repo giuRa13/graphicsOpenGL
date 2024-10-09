@@ -95,24 +95,9 @@ Grid::Grid()
 }
 
 
-void Grid::Update()
-{
-    if(Input::Instance()->IsLeftButtonClicked())
-    {
-        m_rotation.x += Input::Instance()->GetMouseMotionY();
-        m_rotation.y += Input::Instance()->GetMouseMotionX();
-    }
-   
-    m_model = glm::mat4(1.0f);
-    m_model = glm::translate(m_model, m_position);
-    m_model = glm::rotate(m_model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    m_model = glm::rotate(m_model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-
 void Grid::Render(const Shader& shader)
 {
-    shader.SendUniformData("model", m_model);
+    shader.SendUniformData("model", glm::mat4(1.0f));
    
     shader.SendUniformData("isLit", false);
     shader.SendUniformData("isTextured", false);

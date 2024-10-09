@@ -55,9 +55,12 @@ public:
     Model();
 
     bool Load(const std::string& filename);
+
+    void SetPosition(GLfloat x, GLfloat y, GLfloat z);
+    void SetRotation(GLfloat pitch, GLfloat yaw, GLfloat roll);
+    void SetScale(GLfloat x, GLfloat y, GLfloat z);
     
-    void Update();
-    
+    void Update() {};
     void Render(const Shader& shader);
     
 
@@ -75,11 +78,7 @@ private:
 
     glm::vec3 m_position;
     glm::vec3 m_rotation;
-
-    float m_shininess;
-    glm::vec3 m_ambient;
-    glm::vec3 m_diffuse;
-    glm::vec3 m_specular;
+    glm::vec3 m_scale;
 
 };
 

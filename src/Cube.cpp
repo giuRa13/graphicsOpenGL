@@ -7,7 +7,7 @@
 #include <glm/trigonometric.hpp>
 
 
-Cube::Cube()
+Cube::Cube(const std::string& textureFilename)
 {
     GLfloat vertices[] = { -0.5f,  0.5f,  0.5f,   //front
                             0.5f,  0.5f,  0.5f,
@@ -40,35 +40,35 @@ Cube::Cube()
                             -0.5f, -0.5f, -0.5f };
 
 
-    GLfloat colors[] = { 1.0f, 0.0f, 0.0f, 1.0f,   //front
-                         1.0f, 0.0f, 0.0f, 1.0f,
-                         1.0f, 0.0f, 0.0f, 1.0f,
-                         1.0f, 0.0f, 0.0f, 1.0f,
+    GLfloat colors[] = { 1.0f, 1.0f, 1.0f, 1.0f,   //front
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
 
-                         0.0f, 1.0f, 0.0f, 1.0f,   //back
-                         0.0f, 1.0f, 0.0f, 1.0f,
-                         0.0f, 1.0f, 0.0f, 1.0f,
-                         0.0f, 1.0f, 0.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,   //back
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
 
-                         0.0f, 0.0f, 1.0f, 1.0f,   //left
-                         0.0f, 0.0f, 1.0f, 1.0f,
-                         0.0f, 0.0f, 1.0f, 1.0f,
-                         0.0f, 0.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,   //left
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
 
-                         1.0f, 1.0f, 0.0f, 1.0f,  //right
-                         1.0f, 1.0f, 0.0f, 1.0f,
-                         1.0f, 1.0f, 0.0f, 1.0f,
-                         1.0f, 1.0f, 0.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,  //right
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
 
-                         1.0f, 0.0f, 1.0f, 1.0f,   //top
-                         1.0f, 0.0f, 1.0f, 1.0f,
-                         1.0f, 0.0f, 1.0f, 1.0f,
-                         1.0f, 0.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,   //top
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
 
-                         0.0f, 1.0f, 1.0f, 1.0f,   //bottom
-                         0.0f, 1.0f, 1.0f, 1.0f,
-                         0.0f, 1.0f, 1.0f, 1.0f,
-                         0.0f, 1.0f, 1.0f, 1.0f  };
+                         1.0f, 1.0f, 1.0f, 1.0f,   //bottom
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f,
+                         1.0f, 1.0f, 1.0f, 1.0f  };
 
     
     GLfloat UVs[] = { 0.0f, 1.0f, 1.0f, 1.0f,
@@ -125,14 +125,16 @@ Cube::Cube()
 
     m_buffer.LinkEBO();
 
-    m_texture.Load("textures/wood1.png");
+    m_texture.Load("textures/" + textureFilename);
 
-    m_shininess = 50.0f;
     m_position = glm::vec3(0.0f);
     m_rotation = glm::vec3(0.0f);
-    m_ambient = glm::vec3(0.4f, 0.4f, 0.4f); //shade of gray
-    m_diffuse = glm::vec3(0.1f, 0.7f, 0.2f); //more green
-    m_specular = glm::vec3(0.8f, 0.8f, 0.8f); //almost white
+    m_scale = glm::vec3(1.0f);
+    
+    m_material.SetShininess(50.0f);
+    m_material.SetAmbient(glm::vec3(0.4f, 0.4f, 0.4f)); //shade of gray
+    m_material.SetDiffuse(glm::vec3(0.1f, 0.7f, 0.2f)); //more green
+    m_material.SetSpecular(glm::vec3(0.8f, 0.8f, 0.8f)); //almost white
 
 }
 
@@ -143,34 +145,44 @@ Cube::~Cube()
 }
 
 
-void Cube::Update()
+void Cube::SetPosition(GLfloat x, GLfloat y, GLfloat z)
 {
-    if(Input::Instance()->IsLeftButtonClicked())
-    {
-        m_rotation.x += Input::Instance()->GetMouseMotionY();
-        m_rotation.y += Input::Instance()->GetMouseMotionX();
-    }
-    
-    m_model = glm::mat4(1.0f);
-    m_model = glm::translate(m_model, m_position);
-    m_model = glm::rotate(m_model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    m_model = glm::rotate(m_model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    m_normal = glm::inverse(glm::mat3(m_model));
+    m_position.x = x;
+    m_position.y = y;
+    m_position.z = z;
+}
+
+void Cube::SetRotation(GLfloat pitch, GLfloat yaw, GLfloat roll)
+{
+    m_rotation.x = pitch;
+    m_rotation.y = yaw;
+    m_rotation.z = roll;
+}
+
+void Cube::SetScale(GLfloat x, GLfloat y, GLfloat z)
+{
+    m_scale.x = x;
+    m_scale.y = y;
+    m_scale.z = z;
 }
 
 
 void Cube::Render(const Shader& shader)
 {
+
+    m_model = glm::mat4(1.0f);
+    m_model = glm::translate(m_model, m_position);
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    m_model = glm::scale(m_model, m_scale);
+    m_normal = glm::inverse(glm::mat3(m_model));
+    
     shader.SendUniformData("model", m_model);
     shader.SendUniformData("normal", m_normal);
-
-    shader.SendUniformData("isLit", true);
     shader.SendUniformData("isTextured", true);
-    
-    shader.SendUniformData( "material.shininess", m_shininess);
-    shader.SendUniformData("material.ambient", m_ambient.r, m_ambient.g, m_ambient.b);
-    shader.SendUniformData("material.diffuse", m_diffuse.r, m_diffuse.g, m_diffuse.b);
-    shader.SendUniformData( "material.specular", m_specular.r, m_specular.g, m_specular.b);
+
+    m_material.SendToShader(shader);
 
     m_buffer.LinkVBO(shader, "vertexIn", Buffer::VBOType::VertexBuffer, Buffer::ComponentType::XYZ, Buffer::DataType::FloatData);
     m_buffer.LinkVBO(shader, "colorIn", Buffer::VBOType::ColorBuffer, Buffer::ComponentType::RGBA, Buffer::DataType::FloatData);

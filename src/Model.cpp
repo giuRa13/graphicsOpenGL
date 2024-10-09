@@ -3,10 +3,9 @@
 #include "Utility.hpp"
 #include "Input.hpp"
 #include <fstream>
-#include <glm/matrix.hpp>
 #include <iostream>
 #include <unordered_map>
-#include <glm/ext/matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 Model::Model()
@@ -14,16 +13,13 @@ Model::Model()
     m_meshes.reserve(10);
     m_buffers.reserve(10);
     
-    m_shininess = 50.0f;
     m_position = glm::vec3(0.0f);
     m_rotation = glm::vec3(0.0f);
-    m_ambient = glm::vec3(0.4f, 0.4f, 0.4f); //shade of gray
-    m_diffuse = glm::vec3(0.1f, 0.7f, 0.2f); //more green
-    m_specular = glm::vec3(0.8f, 0.8f, 0.8f); //almost white
+    m_scale = glm::vec3(1.0f);
 }
 
 
-bool Model::Load(const std::string &filename)
+bool Model::Load(const std::string& filename)
 {
     std::fstream file( filename , std::ios_base::in); // (read only)
 
@@ -163,8 +159,28 @@ bool Model::Load(const std::string &filename)
     return true;
 }
 
+void Model::SetPosition(GLfloat x, GLfloat y, GLfloat z)
+{
+    m_position.x = x;
+    m_position.y = y;
+    m_position.z = z;
+}
 
-void Model::Update()
+void Model::SetRotation(GLfloat pitch, GLfloat yaw, GLfloat roll)
+{
+    m_rotation.x = pitch;
+    m_rotation.y = yaw;
+    m_rotation.z = roll;
+}
+
+void Model::SetScale(GLfloat x, GLfloat y, GLfloat z)
+{
+    m_scale.x = x;
+    m_scale.y = y;
+    m_scale.z = z;
+}
+
+/*void Model::Update()
 {
     if(Input::Instance()->IsLeftButtonClicked())
     {
@@ -177,21 +193,22 @@ void Model::Update()
     m_model = glm::rotate(m_model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
     m_model = glm::rotate(m_model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
     m_normal = glm::inverse(glm::mat3(m_model));
-}
+}*/
 
 void Model::Render(const Shader& shader)
 {
+
+    m_model = glm::mat4(1.0f);
+    m_model = glm::translate(m_model, m_position);
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    m_model = glm::rotate(m_model, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    m_normal = glm::inverse(glm::mat3(m_model));
+    
     shader.SendUniformData("model", m_model);
     shader.SendUniformData("normal", m_normal);
-  
-    shader.SendUniformData("isLit", true);
     shader.SendUniformData("isTextured", false);
   
-    shader.SendUniformData("material.shininess", m_shininess);
-    shader.SendUniformData("material.ambient", m_ambient.r, m_ambient.g, m_ambient.b);
-    shader.SendUniformData("material.diffuse", m_diffuse.r, m_diffuse.g, m_diffuse.b);
-    shader.SendUniformData("material.specular", m_specular.r, m_specular.g, m_specular.b);
-
     int count = 0;
     for (auto& buffer : m_buffers)
     {
@@ -259,7 +276,7 @@ void Model::SortVertexData(Mesh& newMesh, const Mesh& oldMesh, const std::vector
                                                                
     for (const auto& face : faces)
     {
-        for(auto i=0; i<3; i++)
+        for(auto i=0; i < 3; i++)
         {
             auto it = map.find(face[i]);
 

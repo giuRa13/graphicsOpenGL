@@ -14,7 +14,7 @@ class Grid
 public:
     Grid();
 
-    void Update();
+    void Update() {};
     void Render(const Shader& shader);
 
 

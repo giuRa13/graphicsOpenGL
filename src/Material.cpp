@@ -1,8 +1,8 @@
 #include "Material.hpp"
 #include "Utility.hpp"
-#include "iostream"
+#include <iostream>
 #include <fstream>
-#include <string>
+
 
 
 
@@ -150,7 +150,7 @@ bool Material::Load(const std::string& filename, std::vector<Material>& material
             //read ambient texture file
             if(subStrings[0] == "map_Ka")
             {
-                materials.back().m_ambientMap.Load("textures/" + subStrings[1]);
+                materials.back().m_ambientMap.Load( "textures/" + subStrings[1]);
                 materials.back().m_isTextured = true;
                 continue;
             }
@@ -173,7 +173,7 @@ bool Material::Load(const std::string& filename, std::vector<Material>& material
 
             if(subStrings[0] == "map_Ns" || subStrings[0] == "bump")
             {
-                materials.back().m_normalMap.Load("textures/" +  subStrings[1]);
+                materials.back().m_normalMap.Load("textures/" + subStrings[1]);
                 materials.back().m_isTextured = true;
                 continue;
             }

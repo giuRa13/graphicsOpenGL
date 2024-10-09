@@ -13,11 +13,15 @@ public:
     Camera();
 
     void Set3DView();
+    void SetSpeed(GLfloat speed);
+
     void Update();
     void SendToShader(const Shader& shader);
 
 
 protected:
+    GLfloat m_speed;
+
     glm::mat4 m_view;
     glm::mat4 m_proj;
 
