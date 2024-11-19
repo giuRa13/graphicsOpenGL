@@ -1,0 +1,34 @@
+{
+    "name": "base",
+    "version-string": "0.1.0",
+    "dependencies": [
+        {
+            "name": "opengl"
+        },
+        {
+            "name": "sdl2"
+        },
+        {
+            "name": "sdl2-image"
+        },
+        {
+            "name": "glad"
+        },
+        {
+            "name": "glm"
+        },
+        {
+            "name": "stb"
+        },
+        {
+            "name": "imgui",
+            "default-features": false,
+            "features": [
+                "sdl2-binding",
+                "opengl3-binding",
+                "docking-experimental"
+            ]
+        }
+    ]
+}
+

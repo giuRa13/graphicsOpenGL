@@ -2,7 +2,7 @@
 
 
 #include <glm/glm.hpp>
-#include "../include/glad/glad.h"
+#include <glad/glad.h>
 #include "Shader.hpp"
 
 

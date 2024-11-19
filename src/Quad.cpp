@@ -68,7 +68,7 @@ Quad::Quad(const std::string& textureFilename)
 
     m_buffer.LinkEBO();
 
-    m_texture.Load( "textures/" + textureFilename);
+    m_texture.Load( /*"../textures/" +*/ textureFilename);
     
     m_position = glm::vec3(0.0f);
     m_rotation = glm::vec3(0.0f); 

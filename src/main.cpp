@@ -3,7 +3,7 @@
 //g++ ./src/*.cpp ./src/glad.c -I./src/*.hpp -I./include -o main.exe -lSDL2 -lSDL2_image
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "../include/glad/glad.h"
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include "Screen.hpp"
 #include "Input.hpp"
@@ -39,34 +39,39 @@ int main(int argc, char* argv[])
     GetOpenGLVersionInfo();
 
     Shader defaultShader;
-    defaultShader.Create("shaders/default.vert", "shaders/default.frag");
+    defaultShader.Create("../shaders/default.vert", "../shaders/default.frag");
     
     Shader lightShader;
-    lightShader.Create("shaders/light.vert", "shaders/light.frag");
+    lightShader.Create("../shaders/light.vert", "../shaders/light.frag");
 
     float xPos = 0.0f;
     float yPos = 0.0f;
 
     /////////////////////////////////////////////////////////
     
-    Quad floor("Floor.jpg");
+    Quad floor("../textures/Floor.jpg");
     floor.SetRotation(90.0f, 0.0f, 0.0f);
     floor.SetScale(25.0f, 25.0f, 1.0f);//(double of grid SIZE)
     
-    Cube cube1("wood1.png");
+    /*Cube cube1("../textures/wood1.png");
     cube1.SetPosition(-1.0f, 0.25f, -2.0f);
     cube1.SetRotation(0.0f, 45.0f, 0.0f);
-    cube1.SetScale(0.5f, 0.5f, 0.5f);
+    cube1.SetScale(0.5f, 0.5f, 0.5f);*/
 
-    Cube cube2("wood2.png");
+    Cube cube2("../textures/wood2.png");
     cube2.SetPosition(-0.5f, 0.25f, -3.0f);
     cube2.SetRotation(0.0f, 80.0f, 0.0f);
     cube2.SetScale(0.5f, 0.5f, 0.5f);
 
+    Cube cube3("../textures/wood1.png");
+    cube3.SetPosition(-2.2f, 0.25f, -4.0f);
+    cube3.SetRotation(0.0f, -80.0f, 0.0f);
+    cube3.SetScale(0.5f, 0.5f, 0.5f);
+
     Model cabinet;
-    cabinet.Load("models/Armchair.obj");
-    cabinet.SetPosition(3.0f, 0.25f, -3.0f);
-    cabinet.SetRotation(0.0f, 135.0f, 0.0f);
+    cabinet.Load("../models/Cabinet.obj");
+    cabinet.SetPosition(3.0f, 0.25f, -8.0f);
+    cabinet.SetRotation(0.0f, -250.0f, 0.0f);
 
     Grid grid;
 
@@ -120,8 +125,6 @@ int main(int argc, char* argv[])
         camera.SendToShader(defaultShader);
       
         grid.Render(defaultShader);
-        cube1.Render(defaultShader);
-
 
         lightShader.Use();
         light.SendToShader(lightShader);
@@ -130,6 +133,7 @@ int main(int argc, char* argv[])
         light.Render(lightShader);
         floor.Render(lightShader);
         cube2.Render(lightShader);
+        cube3.Render(lightShader);
         cabinet.Render(lightShader);
 
         Screen::Instance()->Present();    

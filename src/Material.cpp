@@ -75,7 +75,7 @@ void Material::SetSpecular(const glm::vec3& specular)
 
 bool Material::Load(const std::string& filename, std::vector<Material>& materials)
 {
-    std::fstream file("materials/" + filename, std::ios_base::in);
+    std::fstream file("../materials/" + filename, std::ios_base::in);
 
     if(!file)
     {
@@ -150,7 +150,7 @@ bool Material::Load(const std::string& filename, std::vector<Material>& material
             //read ambient texture file
             if(subStrings[0] == "map_Ka")
             {
-                materials.back().m_ambientMap.Load( "textures/" + subStrings[1]);
+                materials.back().m_ambientMap.Load( "../textures/" + subStrings[1]);
                 materials.back().m_isTextured = true;
                 continue;
             }
@@ -158,7 +158,7 @@ bool Material::Load(const std::string& filename, std::vector<Material>& material
             //read diffuse texture file
             if (subStrings[0] == "map_Kd") 
             {
-                materials.back().m_diffuseMap.Load("textures/" + subStrings[1]);
+                materials.back().m_diffuseMap.Load("../textures/" + subStrings[1]);
                 materials.back().m_isTextured = true;
                 continue;
             }
@@ -166,14 +166,14 @@ bool Material::Load(const std::string& filename, std::vector<Material>& material
             //read specular teture file
             if(subStrings[0] == "map_Ks")
             {
-                materials.back().m_specularMap.Load("textures/" + subStrings[1]);
+                materials.back().m_specularMap.Load("../textures/" + subStrings[1]);
                 materials.back().m_isTextured = true;
                 continue;
             }
 
             if(subStrings[0] == "map_Ns" || subStrings[0] == "bump")
             {
-                materials.back().m_normalMap.Load("textures/" + subStrings[1]);
+                materials.back().m_normalMap.Load("../textures/" + subStrings[1]);
                 materials.back().m_isTextured = true;
                 continue;
             }
